@@ -10,10 +10,16 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var tenant = require('./routes/tenant');
 
 var config = require('./config');
 
 var app = express();
+
+//Database
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/nodetest2');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -79,8 +85,16 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
 
+// Make our db accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
+
+
 app.use('/', routes);
 app.use('/users', users);
+app.use('/tenant', tenant);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
