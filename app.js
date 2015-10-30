@@ -20,7 +20,7 @@ var app = express();
 //Database
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('mongodb://heroku_9c6n38c5:hffprod844sagtlvndmldu102h@ds045664.mongolab.com:45664/heroku_9c6n38c5' || 'localhost:27017/nodetest2');
+var db = monk(process.env.MONGOLAB_URL);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
